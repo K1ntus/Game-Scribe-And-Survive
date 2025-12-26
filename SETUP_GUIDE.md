@@ -88,6 +88,13 @@ This guide will walk you through setting up the Gym_Rhythm scene in Unity Editor
    - Drag a sprite/texture to the Albedo/Texture slot
    - Drag material onto Sprite Quad's Mesh Renderer component
 
+7. **Add Animator (Optional):**
+   - If you want visual animations for Move/Stumble:
+     - Add Component to Player or Sprite: `Animator`
+     - Create an Animator Controller
+     - Add triggers: "Move" and "Stumble"
+   - Note: Animator is optional - system works without it
+
 ### 4. Create Debug UI (Beat Visualizer)
 
 1. **Create Canvas:**

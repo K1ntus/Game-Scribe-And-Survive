@@ -54,7 +54,7 @@ public class BeatVisualizer : MonoBehaviour
     private void Start()
     {
         // Subscribe to conductor events if not already subscribed
-        if (Conductor.Instance != null && Conductor.Instance.OnBeat != null)
+        if (Conductor.Instance != null)
         {
             // Unsubscribe first to avoid double subscription
             Conductor.Instance.OnBeat -= OnBeat;

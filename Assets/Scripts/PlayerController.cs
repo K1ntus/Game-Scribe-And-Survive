@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        animator = GetComponentInChildren<Animator>();
+        animator = GetComponentInChildren<Animator>(); // Optional: will be null if no Animator exists
 
         // Set up Rigidbody for 3D physics
         rb.useGravity = true;
@@ -90,11 +90,8 @@ public class PlayerController : MonoBehaviour
         // Check for movement input
         if (input.magnitude > 0.1f)
         {
-            // Normalize diagonal movement
-            if (input.magnitude > 1f)
-            {
-                input.Normalize();
-            }
+            // Normalize input for consistent movement speed
+            input.Normalize();
 
             // Validate rhythm timing
             bool isOnBeat = RhythmValidator.IsInputOnBeat();
