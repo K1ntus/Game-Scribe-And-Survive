@@ -1,125 +1,136 @@
+
 ---
 
-# GAME DESIGN DOCUMENT: *Scribe & Survive* (Rev 3.0)
+# GAME DESIGN DOCUMENT: *Scribe & Survive* (Rev 4.0)
 
 **Working Title:** Scribe & Survive
-**Genre:** Rhythm-Infused Co-op Chaos / Castle Defense
+**Genre:** Rhythm-Action Co-op Chaos
 **Setting:** 8th Century Frankish Empire (Carolingian Renaissance)
 **Platform:** PC / Console
-**Target Audience:** Fans of *Crypt of the NecroDancer*, *Overcooked*, and *Patapon*.
+**Target Audience:** Fans of *Crypt of the NecroDancer* (Rhythm), *Overcooked* (Chaos), and *Magicka* (Friendly Fire).
 
 ---
 
 ## 1. Executive Summary
-**Scribe & Survive** is a local co-op game where 1-4 players defend a monastery. Unlike traditional co-op management games, the chaos is bound by a **musical heartbeat**.
+**Scribe & Survive** is a local co-op game where 1-4 players defend a monastery. The gameplay fuses rhythm-based inputs with physics-based chaos.
 
-The goal is to preserve knowledge. While 1-3 players (Defenders) physically hold back Vikings, one player (The Scribe) must transcribe illuminated manuscripts. The twist: **The Scribe is the Conductor.** Their rhythmic success empowers the defenders, and the defenders’ impacts contribute to the percussion of the soundtrack.
+The goal is to transcribe knowledge before the Vikings burn it. Unlike traditional class-based games, roles are fluid: **You are what you hold.** One player holds **The Codex** (The Scribe) to play the rhythm minigame, while others hold **Hammers/Torches** to defend them.
+
+The Twist: **The Beat is Law.** Every action—moving, hitting, or writing—must be synced to the music. Missing the beat doesn't just lower your score; it causes your character to stumble, drop items, and create physical hazards that doom your team.
 
 ---
 
 ## 2. Core Gameplay Loop
 
-The game runs on a global **BPM (Beats Per Minute)** clock.
+The game runs on a strict **Global BPM (Beats Per Minute)**.
 
-### A. The Production Chain: "The Conductor" (The Scribe)
-The Scribe does not just "type"; they drive the level's momentum.
+### A. The Objective
+Complete the transcription of the Codex before Sunrise (Time Limit) or before the Vikings destroy the Monastery (Health).
 
-1.  **The Beat (Visual & Audio):**
-    *   **Audio:** A Gregorian Chant provides the melody.
-    *   **Visual Metronome:** The "Pulse of the Page." The ink on the parchment, the candles on the wall, and even the blood on the floor **glow/throb in sync with the beat**. This ensures the Scribe can play even if the audio mix is chaotic.
-2.  **The Transcription:**
-    *   Standard directional inputs (Arrows/Face Buttons) write the text.
-    *   **Perfect Sync:** Landing hits on the beat makes the quill glow and speeds up the "Ink Drying" process.
-3.  **Active Defense - "Liturgies" (New System):**
-    *   The Scribe is no longer passive. By inputting specific "Power Chords" (special button combos on the beat), the Scribe casts immediate effects:
-        *   *Vox Clamantis (The Shout):* A 3-note combo that emits a shockwave from the desk, stunning nearby Vikings.
-        *   *Sanctus (The Shield):* A held note that creates a temporary barrier around a Defender carrying resources.
-
-### B. The Defense Chain: "The Percussion" (The Defenders)
-Defenders manage resources and physics combat. To help the Scribe, the chaos is **Diegetic**.
-
-1.  **Rhythmic Violence:**
-    *   Vikings do not attack randomly; they wind up and strike on the beat.
-    *   **Player Impacts:** Hitting a Viking with a hammer or slamming a door creates a heavy percussion sound (Drum/Clap) that slots into the music track, helping the Scribe keep time.
-2.  **The Trip (Revised Physics):**
-    *   **Viking Trample:** If a Viking steps on a Manuscript/Ink -> **CRUNCH.** Item destroyed.
-    *   **Player Trip (New):** If a Defender sprints directly over a loose item, they do **NOT** damage the item. Instead, the player **Trips** (ragdolls for 1.5 seconds).
-    *   *Consequence:* The item is safe, but the team loses manpower time, and the clumsy player becomes a physics obstacle.
-3.  **Winning:**
-    *   Complete X number of Manuscripts before Sunrise.
+### B. The Rhythm Law (Strict Input)
+There is no audio quantization (lag). We use **Input Validation**.
+*   **The Grace Window:** Actions are only accepted if input is within ±0.15s of the beat.
+*   **Success:** The action fires immediately. The sound effect acts as a musical "sweetener" (Snare/Clap).
+*   **Failure (The Whiff):**
+    *   **Movement:** Player "Stumbles" (hops on one foot). Move distance = 0.
+    *   **Combat:** Player "Flails" (off-balance swing). Damage = 0.
+    *   **Carrying Item:** **"Butterfingers."** The item is instantly dropped (See Section 4: Physics).
 
 ---
 
-## 3. Chaos Management Systems
+## 3. The Fluid Class System (Item-Based Roles)
 
-### 1. The Light Mechanic (Rhythm Obfuscation)
-*   **The Rule:** Darkness creates panic, not UI failure.
-*   **The Mechanic:** When candles are extinguished by wind/Vikings:
-    *   Interaction prompts remain visible.
-    *   **The Visual Metronome Fades:** The "glowing pulse" on objects disappears. The Scribe must rely entirely on *audio cues* until a Defender relights the torch.
+There is no character select screen. Roles are defined dynamically by the object currently held.
 
-### 2. "Sanctity" (Floor Hazards)
-*   **Slick Zones:** Spilled ink/ale reduces friction.
-*   **Rats:** Spawn on dirty floors to steal loose items.
-*   **Note:** Rats scurry in time with the music (on the half-beat), making them predictable but harder to hit if you aren't paying attention to the rhythm.
+### 1. The Scribe (Holding *The Codex*)
+*   **Role:** The VIP. The only player who generates progress.
+*   **Movement:** WASD (On Beat). The Scribe is mobile and must run to safe zones.
+*   **Action (Write Mode):**
+    *   Hold Trigger (L2/Shift) to **ROOT** in place.
+    *   While rooted, a Rhythm UI appears (Arrows/Face Buttons). Hitting notes fills the "Knowledge Bar."
+    *   *Constraint:* Can only write while standing in **Light**.
+*   **Defense:** "Ink Dash." Costs Ink Resource. A rapid dash (invulnerable frames) to escape encirclement.
+
+### 2. The Defender (Holding *Weapons*)
+*   **Role:** Crowd Control.
+*   **Weapons:** Hammers, Shields, Benches.
+*   **Action:**
+    *   **Attack:** directional hit on the beat.
+    *   **Shove:** Push Vikings (or the Scribe) out of the way.
+
+### 3. The Illuminator (Holding *The Torch*)
+*   **Role:** Support & Metronome Maintenance.
+*   **Action:** Relights wall sconces.
+*   **Passive:** Creates a mobile radius of light. If the Scribe stands near the Illuminator, they can write anywhere (even in dark corners).
 
 ---
 
-## 4. Item Logic & Physics
+## 4. Physics & "The Butterfingers" System
 
-### 1. The "Wobble" (Safe State)
-*   Dropped items play a "Wobble" animation on the floor. They are obstacles, but they are safe unless a Viking steps on them.
+Connecting Rhythm failure to World Chaos.
 
-### 2. Throw & Catch
-*   Players can Hurl items.
-*   **Perfect Catch:** Catching an item exactly on the beat results in a "Perfect Catch" (auto-balances the player, prevents sliding).
-*   **Off-Beat Catch:** The player catches it but stumbles backward slightly.
+### 1. Dropped Items (The Consequence of Missed Beats)
+If a player attempts to Move, Throw, or Dash off-beat while holding an item, they drop it.
+*   **Ink Pot Drops:** Smashes instantly. Creates a **Slick Zone**.
+    *   *Effect:* Players/Vikings moving through it slide uncontrollably (friction removed).
+*   **The Codex Drops:** Falls open on the floor.
+    *   *Effect:* Becomes a **Trip Hazard**. Anyone sprinting over it stumbles.
+    *   *Risk:* If a Viking steps on the fallen Codex, Game Over.
+
+### 2. The "Trip" vs. "Ragdoll"
+*   **The Stumble (Missed Beat):** Short animation (0.5s). Disrupted flow, but quick recovery.
+*   **The Ragdoll (Heavy Impact):** Caused by Viking hits or sprinting into a wall/obstacle. Full loss of control for 2.0s.
 
 ---
 
-## 5. Co-op Roles (Fluid Class System)
+## 5. Chaos Management
 
-*   **The Scribe (The Conductor):** Stationary. Plays the Rhythm UI. protects the room via "Liturgies" (Shouts/Buffs).
-*   **The Hauler:** High movement speed. Focuses on bringing parchment/ink to the Scribe.
-*   **The Defender:** Uses physics objects (tables, benches) to shove Vikings out.
-*   **The Illuminator (Support):** Prioritizes keeping torches lit (maintaining the Visual Metronome) and cleaning floors (preventing Rats).
+### 1. The Light Mechanic
+*   **Rule:** The Scribe cannot write in the dark (too panicked).
+*   **Darkness:**
+    *   Wall sconces can be blown out by wind or extinguished by Vikings.
+    *   When dark, the **Visual Metronome** (pulsing edges of the screen) fades. Players must rely on Audio only.
+*   **Strategy:** The Illuminator must act as a "Human Lighthouse" for the Scribe when the room goes dark.
+
+### 2. The "Hot Potato" Recovery
+Since roles are item-based, the team must adapt to failure.
+*   *Scenario:* The Scribe gets hit by a Viking and Ragdolls. The Codex flies across the room.
+*   *Recovery:* A Defender must stop fighting, dash over, pick up the Codex (becoming the new Scribe), and find a light source to continue writing. The former Scribe wakes up, grabs a hammer, and joins the fight.
 
 ---
 
 ## 6. Visuals & Audio Style
 
-### Audio: The "Diegetic Symphony"
-The soundtrack is constructed in layers.
-*   **Layer 1 (Base):** Monks humming (The Grid).
-*   **Layer 2 (Scribe Success):** As the Scribe maintains a streak, a high-fidelity choir fades in.
-*   **Layer 3 (Combat):** Viking shield-bashes serve as the "Kick Drum." Player hammer-hits serve as the "Snare."
-    *   *Design Goal:* A chaotic room should sound like a tribal drum circle, not white noise.
+### Audio: The "Backing Track" Safety Net
+*   **Layer 1 (The Grid):** A persistent, unshakeable drum/bass beat. This *never* drops out, ensuring players always have a reference.
+*   **Layer 2 (Player Input):** Successful hits/steps play musical notes that harmonize with the Grid.
+*   **Layer 3 (Failure):** Missed beats play a "dull thud" or "string snap," serving as negative audio feedback without ruining the song's tempo.
 
-### Visuals: "The Pulse"
-*   **Art Style:** 2D Paper Puppets in 3D world.
-*   **The Metronome Shader:** A global shader effect. When the beat hits, the edges of the screen, the ink on the desk, and the eyes of the Vikings pulse with a brief illumination.
-*   **Readability:**
-    *   **Safe Items:** Outline in White.
-    *   **Danger Zones (Viking Feet):** Outline in Red.
+### Visuals: Diegetic UI
+*   **The Codex:** The "Health Bar" is the condition of the book. As it takes damage, pages tear.
+*   **The Ink:** The "Ammo" for writing. The Scribe must occasionally run to an Ink Well to refill their quill.
+*   **Enemy Tells:** Vikings "wind up" on beat 1, flash red on beat 2, and strike on beat 3.
 
 ---
 
-## 7. MVP (Minimum Viable Product) Goals (Revised)
+## 7. MVP (Minimum Viable Product) Goals
 
-For the prototype, we are cutting complex NavMesh changes to focus on the "Game Feel."
+For the prototype, we focus on the **"Tightness" of the Rhythm Loop**.
 
-1.  **The Rhythm Engine:**
-    *   Input system synced to audio.
-    *   **Implementation of the "Visual Metronome" shader.**
-2.  **Diegetic Sound Integration:**
-    *   Basic enemy movement and attack animations locked to the BPM.
-    *   Impact sounds (Hammer hitting Enemy) quantization (snapping the sound to the nearest 1/8th note so it sounds musical).
-3.  **The "Trip" Physics:**
-    *   Player collider triggers ragdoll state when overlapping an item collider at Sprint speed. Item remains undestroyed.
-4.  **The Active Scribe:**
-    *   Implementation of one "Liturgy" (The Shout/Stun) to prove the Scribe can affect the physical world.
+1.  **The "Strict" Input Engine:**
+    *   Implement the ±0.15s grace window.
+    *   Implement the "Stumble" state for off-beat inputs.
+2.  **The "Field Scribe" Controller:**
+    *   Movement (WASD) vs. Writing (Root + Buttons).
+    *   The "Ink Dash" ability.
+3.  **Item State Logic:**
+    *   Pickup/Drop logic changes the player's HUD.
+    *   Implement "Ink Slick" physics when a pot is dropped.
+4.  **Basic Light/Dark Loop:**
+    *   Bool check: `IsPlayerInLight?` If False, block "Write Mode."
 
 ---
 
-### Key Cut from Rev 2.0
-*   **Structural Integrity (Wall Breaking):** Removed. The layout is now static to prevent AI pathfinding bugs during the prototype phase. Defense focuses on doors and windows only.
+### Cut Content (Saved for Post-Prototype)
+*   **Complex Liturgies:** Removed the complex spell-casting system. The Scribe's only active ability is "Write" and "Dash." (Keep it simple).
+*   **Wall Destruction:** The room geometry remains static.
